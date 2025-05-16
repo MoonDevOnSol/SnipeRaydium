@@ -23,7 +23,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-TELEGRAM_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
+TELEGRAM_TOKEN = "7942810514:AAGaSAP4pGnGHtFkVK_ErpHvXWVrunZ9HvA"
 SOLANA_RPC_URL = "https://api.mainnet-beta.solana.com"
 
 user_wallets = {}
