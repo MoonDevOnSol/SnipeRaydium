@@ -5,7 +5,7 @@ const bs58 = require('bs58');
 const axios = require('axios');
 const Buffer = require('buffer').Buffer;
 
-const TELEGRAM_TOKEN = '8031905435:AAHeRJVzGROsoJk-tw8r6kfnVDLg-v-kKxo';
+const TELEGRAM_TOKEN = '8031905435:AAFsofuqzvfIV-HW-_y5W8U3cbbREO0c3Gg';
 const SOLANA_RPC_URL = 'https://api.mainnet-beta.solana.com';
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
@@ -43,7 +43,7 @@ bot.on('callback_query', async (query) => {
     case 'create_wallet': {
       const wallet = Keypair.generate();
       userWallets[userId] = wallet;
-      const privKey = bs58.encode(wallet.secretKey);
+      const privKey = bs58.encode(Buffer.from(wallet.secretKey));
       const pubKey = wallet.publicKey.toString();
       bot.sendMessage(chatId, `ðŸŽ‰ New wallet created!
 
