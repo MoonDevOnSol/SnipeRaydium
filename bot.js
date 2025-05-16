@@ -5,7 +5,7 @@ const bs58 = require('bs58');
 const axios = require('axios');
 const Buffer = require('buffer').Buffer;
 
-const TELEGRAM_TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN_HERE';
+const TELEGRAM_TOKEN = '8031905435:AAH2cN8YRCw7pi5S-XCnzzrK1Mlp5Wv6xZs';
 const SOLANA_RPC_URL = 'https://api.mainnet-beta.solana.com';
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
