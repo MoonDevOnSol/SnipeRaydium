@@ -30,8 +30,8 @@ bot.onText(/\/start/, (msg) => {
       ]
     }
   };
-  bot.sendMessage(chatId, 'Welcome to the Solana Trading Bot!
-Choose an option:', opts);
+  bot.sendMessage(chatId, `Welcome to the Solana Trading Bot!
+Choose an option:`, opts);
 });
 
 bot.on('callback_query', async (query) => {
