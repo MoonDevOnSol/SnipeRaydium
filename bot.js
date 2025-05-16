@@ -5,7 +5,7 @@ const bs58 = require('bs58');
 const axios = require('axios');
 const Buffer = require('buffer').Buffer;
 
-const TELEGRAM_TOKEN = '8031905435:AAFsofuqzvfIV-HW-_y5W8U3cbbREO0c3Gg';
+const TELEGRAM_TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN_HERE';
 const SOLANA_RPC_URL = 'https://api.mainnet-beta.solana.com';
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
@@ -25,8 +25,8 @@ bot.onText(/\/start/, (msg) => {
         [{ text: 'Honeypot Scan', callback_data: 'honeypot_scan' }],
         [{ text: 'Buy Token', callback_data: 'buy_token' }],
         [{ text: 'Sell Token', callback_data: 'sell_token' }],
-        [{ text: 'ðŸ“– FAQ', callback_data: 'faq' }, { text: 'ðŸ†˜ Help', callback_data: 'help' }],
-        [{ text: 'ðŸŽ¯ Refer', callback_data: 'refer' }]
+        [{ text: 'FAQ', callback_data: 'faq' }, { text: 'Help', callback_data: 'help' }],
+        [{ text: 'Refer', callback_data: 'refer' }]
       ]
     }
   };
@@ -43,9 +43,9 @@ bot.on('callback_query', async (query) => {
     case 'create_wallet': {
       const wallet = Keypair.generate();
       userWallets[userId] = wallet;
-      const privKey = bs58.encode(Buffer.from(wallet.secretKey));
+      const privKey = bs58.encode(Uint8Array.from(wallet.secretKey));
       const pubKey = wallet.publicKey.toString();
-      bot.sendMessage(chatId, `ðŸŽ‰ New wallet created!
+      bot.sendMessage(chatId, `New wallet created!
 
 Public Key:
 ${pubKey}
@@ -62,7 +62,7 @@ ${privKey}`, goBackMenu());
 
     case 'show_wallet': {
       const wallet = userWallets[userId];
-      if (!wallet) return bot.sendMessage(chatId, 'âŒ No wallet found. Please create or import one first.', goBackMenu());
+      if (!wallet) return bot.sendMessage(chatId, 'No wallet found. Please create or import one first.', goBackMenu());
       const pubKey = wallet.publicKey.toString();
       const balance = await connection.getBalance(wallet.publicKey);
       bot.sendMessage(chatId, `Wallet Address:
@@ -72,7 +72,7 @@ SOL Balance: ${(balance / 1e9).toFixed(6)} SOL`, goBackMenu());
     }
 
     case 'withdraw_sol':
-      if (!userWallets[userId]) return bot.sendMessage(chatId, 'âŒ No wallet found.', goBackMenu());
+      if (!userWallets[userId]) return bot.sendMessage(chatId, 'No wallet found.', goBackMenu());
       bot.sendMessage(chatId, `Send:
 <recipient_address> <amount_in_SOL>
 
@@ -99,34 +99,33 @@ Example:
       break;
 
     case 'faq':
-      bot.sendMessage(chatId, `ðŸ“– FAQ:
-
-1. What is this bot?
-- It's a secure trading interface for Solana tokens via Telegram.
-
-2. What can I do?
-- Create/import wallets, buy/sell tokens, scan for honeypots, and withdraw SOL.
-
-3. Is it safe?
-- Your wallet keys are stored in memory only during your session.`, goBackMenu());
+      bot.sendMessage(chatId, `FAQ:
+1. Create/import wallets
+2. Buy/sell tokens
+3. Scan tokens
+4. Withdraw SOL`, goBackMenu());
       break;
 
     case 'help':
-      bot.sendMessage(chatId, `ðŸ†˜ Help:
-
-- Use /start to return to the main menu.
-- Use inline buttons to access features.
-- Use /sol or /price <token> for live prices.
-- Need support? Contact @Stupidmoni_dev`, goBackMenu());
+      bot.sendMessage(chatId, `Help:
+- Use /start for main menu
+- Use buttons to interact
+- Contact support if needed`, goBackMenu());
       break;
 
     case 'refer':
-      bot.sendMessage(chatId, `ðŸŽ¯ Refer:
-
-Invite your friends to use this bot!
-Send them this link: https://t.me/YOUR_BOT_USERNAME`, goBackMenu());
+      bot.sendMessage(chatId, `Refer:
+Share the bot link with your friends: https://t.me/YOUR_BOT_USERNAME`, goBackMenu());
       break;
   }
 
   bot.answerCallbackQuery(query.id);
 });
+
+function goBackMenu() {
+  return {
+    reply_markup: {
+      inline_keyboard: [[{ text: 'Back to Menu', callback_data: 'start' }]]
+    }
+  };
+}
